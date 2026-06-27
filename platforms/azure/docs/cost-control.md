@@ -7,8 +7,8 @@ The whole repo is built so a surprise bill is structurally hard.
 
 1. **Ephemeral by default.** Every episode except `00-bootstrap` is `apply` →
    record → `destroy`. Nothing stays running overnight.
-2. **Everything is tagged** `project=azure-demos`, `ephemeral=true`. That tag is
-   how `scripts/cost-guard.sh` finds and nukes leftovers.
+2. **Everything is tagged** `project=talonbots-labs`, `series=azure`, `ephemeral=true`.
+   Those tags are how `scripts/cost-guard.sh` finds and nukes leftovers.
 3. **One always-on resource only:** the tfstate storage account (~pennies/mo).
 4. **Cheap SKUs for demos.** B-series VMs, LRS storage, Standard tiers. The demo
    is the architecture, not the horsepower.

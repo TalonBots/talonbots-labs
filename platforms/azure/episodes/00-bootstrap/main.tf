@@ -33,7 +33,8 @@ resource "azurerm_storage_account" "state" {
   }
 
   tags = {
-    project = "azure-demos"
+    project = "talonbots-labs"
+    series  = "azure"
     purpose = "remote-tfstate"
   }
 }

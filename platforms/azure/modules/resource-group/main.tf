@@ -7,7 +7,8 @@ resource "azurerm_resource_group" "this" {
 
   tags = merge(
     {
-      project   = "azure-demos"
+      project   = "talonbots-labs"
+      series    = "azure"
       managedby = "terraform"
       ephemeral = "true"
     },

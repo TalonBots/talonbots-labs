@@ -3,16 +3,15 @@
 # A trap guarantees teardown even if you Ctrl-C during recording, so nothing is
 # left billing on the credit.
 #
-# Usage:  scripts/apply-record-destroy.sh episodes/00-bootstrap
+# Platform-agnostic — run from any series. Load that platform's creds first.
+# Usage:  ../../shared/apply-record-destroy.sh episodes/00-bootstrap
 set -euo pipefail
 
 EP="${1:?usage: apply-record-destroy.sh <episode-dir>}"
 [ -d "$EP" ] || { echo "no such episode dir: $EP"; exit 1; }
 
-if [ -z "${ARM_CLIENT_ID:-}" ]; then
-  echo "ARM_* not set — run: source scripts/load-azure-creds.sh" >&2
-  exit 1
-fi
+# Each series loads its own creds before calling this (Azure: source
+# scripts/load-azure-creds.sh). Terraform errors clearly if unauthenticated.
 
 cd "$EP"
 

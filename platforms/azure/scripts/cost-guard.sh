@@ -11,11 +11,12 @@
 #   scripts/cost-guard.sh --nuke    # DELETE every demo-tagged RG (asks first)
 set -euo pipefail
 
-TAG_KEY="project"
-TAG_VAL="azure-demos"
+# Scope to this repo's Azure series only — won't touch other projects' RGs.
+PROJECT="talonbots-labs"
+SERIES="azure"
 
-echo ">>> Resource groups tagged ${TAG_KEY}=${TAG_VAL}:"
-mapfile -t RGS < <(az group list --query "[?tags.${TAG_KEY}=='${TAG_VAL}'].name" -o tsv)
+echo ">>> Resource groups tagged project=${PROJECT}, series=${SERIES}:"
+mapfile -t RGS < <(az group list --query "[?tags.project=='${PROJECT}' && tags.series=='${SERIES}'].name" -o tsv)
 
 if [ "${#RGS[@]}" -eq 0 ]; then
   echo "  (none — clean. Nothing billing.)"
