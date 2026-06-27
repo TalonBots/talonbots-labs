@@ -1,0 +1,29 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Real variable + secret material — examples are committed, real ones are NOT
+*.tfvars
+!*.tfvars.example
+.env
+.env.*
+!.env.example
+*.auto.tfvars
+
+# Local Azure creds (always sourced from Vault, never written to disk — belt & suspenders)
+azure-creds.sh
+arm.env
+
+# Editor / OS
+.DS_Store
+*.swp

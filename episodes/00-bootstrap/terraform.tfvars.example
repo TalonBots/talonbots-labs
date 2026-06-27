@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars (gitignored) and tweak if you want non-default names.
+# Defaults work out of the box.
+
+# location        = "eastus"
+# state_rg_name   = "rg-tfstate-demos"
+# state_sa_prefix = "sttfstatedemos"
