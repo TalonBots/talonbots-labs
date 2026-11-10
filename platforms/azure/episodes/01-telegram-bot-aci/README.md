@@ -53,10 +53,11 @@ terraform destroy -auto-approve   # removes ACR, image, container — everything
 
 ### Option B — apply-record-destroy helper (trap guarantees teardown)
 
+Run from this episode directory:
+
 ```bash
 source ../../scripts/load-azure-creds.sh
-../../../shared/apply-record-destroy.sh \
-  platforms/azure/episodes/01-telegram-bot-aci
+../../../../shared/apply-record-destroy.sh .
 # Ctrl-C at any point → destroy fires automatically.
 ```
 

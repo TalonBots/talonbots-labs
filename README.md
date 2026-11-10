@@ -12,7 +12,7 @@ deployed, or set loose. The platform is just where it runs this week.
 
 - **IaC-first.** If it can't be `apply`-ed and `destroy`-ed, it's not a demo here.
 - **Ephemeral by default.** Spin up → record → tear down. Nothing left billing.
-- **No secrets in git.** Credentials come from a vault / env at runtime.
+- **No secrets in git.** Credentials come from environment variables (or a gitignored `.env`) at runtime.
 - **Sanitized, public-forever.** Generic, original demos only — zero employer or
   client content, ever.
 
@@ -43,7 +43,7 @@ Each platform directory is self-contained: its own `episodes/`, `modules/`,
 
 ```bash
 cd platforms/azure
-source scripts/load-azure-creds.sh           # creds from Vault -> ARM_* env
+source scripts/load-azure-creds.sh           # ARM_* from your env or scripts/.env
 ../../shared/apply-record-destroy.sh episodes/00-bootstrap
 ```
 

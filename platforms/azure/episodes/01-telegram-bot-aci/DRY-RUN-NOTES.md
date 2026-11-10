@@ -13,7 +13,7 @@ This is the proof-of-correctness + a filming reference.
 - **`az` CLI is required** on the machine running Terraform — the in-TF `null_resource` calls `az acr build`. (Installed az-cli 2.87.0 during the dry-run; it was missing.)
 - `Microsoft.ContainerRegistry` and `Microsoft.ContainerInstance` providers must be **Registered** on the subscription — both already were.
 - Auth: `source ../../scripts/load-azure-creds.sh` exports `ARM_*`; the build step self-`az login`s with the same SP.
-- Bot token supplied as `TF_VAR_telegram_bot_token` (read from Vault at runtime) — never written to a tfvars file.
+- Bot token supplied as `TF_VAR_telegram_bot_token` (exported in your shell at runtime) — never written to a tfvars file.
 
 ## Timing / editing notes
 - First `apply` takes **~2–4 min**, almost all of it the `az acr build` (uploads context, builds in ACR). That's the one dead-air stretch — **cut or timelapse it** in the edit.

@@ -24,7 +24,7 @@ already be loaded in your shell (each platform has its own `scripts/load-*`).
    `project=talonbots-labs`, `series=<platform>`, `ephemeral=true`.
 3. **Reusable building blocks live in `platforms/<x>/modules/`.** Lift to a
    shared module only when two platforms genuinely share it.
-4. **Secrets never touch git.** Load from Vault (or a gitignored `.env`) at
+4. **Secrets never touch git.** Load from environment variables (or a gitignored `.env`) at
    runtime; commit only `*.example` templates.
 5. **Bootstrap once per platform.** Episode `00` stands up that platform's
    remote-state backend; it's the only thing you keep between sessions.

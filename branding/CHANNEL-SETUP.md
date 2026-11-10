@@ -62,7 +62,7 @@ All paths are under `~/projects/talonbots-labs/`.
 
 ## Account / ownership notes
 - Channel is a **Brand Account** (separate identity, supports multiple managers, transferable).
-- Anchored under your Google account (sign in as the same account you created it with — likely `sun.lemunyon@gmail.com`).
+- Anchored under the owner's Google account (sign in as the same account that created it).
 - `hello@talonbots.com` is a forwarding alias, not a Google login — it's only the public *contact* email, set in Basic info.
 - Monetization (YPP/AdSense) later ties to the owning Google account.
 

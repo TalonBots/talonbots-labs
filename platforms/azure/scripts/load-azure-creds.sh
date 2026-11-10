@@ -1,25 +1,44 @@
 #!/usr/bin/env bash
-# Source this file (don't execute it) to export Azure SP creds as ARM_* env vars.
+# Source this file (don't execute it) to get ARM_* credentials into your shell.
 #   source scripts/load-azure-creds.sh
 #
-# Creds come from Vault homelab/azure-sp — nothing is written to disk.
-# Requires: vault CLI + a valid ~/.vault-token.
+# Resolution order (first match wins):
+#   1. ARM_CLIENT_ID / ARM_CLIENT_SECRET / ARM_TENANT_ID / ARM_SUBSCRIPTION_ID already exported
+#   2. scripts/.env next to this file (gitignored; copy from .env.example)
+#   3. HashiCorp Vault, ONLY if VAULT_ADDR is set and you export AZURE_VAULT_PATH
+#      (e.g. secret/azure-sp with fields client_id, client_secret, tenant_id, subscription_id)
+#
+# Nothing is written to disk and no secret is ever echoed.
 
-: "${VAULT_ADDR:=http://192.168.2.65:8200}"
-export VAULT_ADDR
+_tl_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_tl_have() { [ -n "${ARM_CLIENT_ID:-}" ] && [ -n "${ARM_CLIENT_SECRET:-}" ] && [ -n "${ARM_TENANT_ID:-}" ] && [ -n "${ARM_SUBSCRIPTION_ID:-}" ]; }
 
-_p="homelab/azure-sp"
+if ! _tl_have && [ -f "${_tl_dir}/.env" ]; then
+  set -a; . "${_tl_dir}/.env"; set +a
+fi
 
-ARM_CLIENT_ID=$(vault kv get -field=client_id "$_p")           || { echo "vault read failed (client_id)"; return 1; }
-ARM_CLIENT_SECRET=$(vault kv get -field=client_secret "$_p")   || { echo "vault read failed (client_secret)"; return 1; }
-ARM_TENANT_ID=$(vault kv get -field=tenant_id "$_p")           || { echo "vault read failed (tenant_id)"; return 1; }
-ARM_SUBSCRIPTION_ID=$(vault kv get -field=subscription_id "$_p") || { echo "vault read failed (subscription_id)"; return 1; }
+if ! _tl_have && [ -n "${VAULT_ADDR:-}" ] && [ -n "${AZURE_VAULT_PATH:-}" ] && command -v vault >/dev/null 2>&1; then
+  for _f in client_id client_secret tenant_id subscription_id; do
+    _v="$(vault kv get -field="$_f" "$AZURE_VAULT_PATH")" || { echo "vault read failed ($_f)"; unset _f _v; return 1; }
+    case "$_f" in
+      client_id) export ARM_CLIENT_ID="$_v" ;;
+      client_secret) export ARM_CLIENT_SECRET="$_v" ;;
+      tenant_id) export ARM_TENANT_ID="$_v" ;;
+      subscription_id) export ARM_SUBSCRIPTION_ID="$_v" ;;
+    esac
+  done
+  unset _f _v
+fi
 
+if ! _tl_have; then
+  echo "ARM_* credentials not found."
+  echo "  Option 1: export ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_TENANT_ID, ARM_SUBSCRIPTION_ID"
+  echo "  Option 2: cp scripts/.env.example scripts/.env  and fill it in"
+  unset -f _tl_have; unset _tl_dir
+  return 1
+fi
+
+# NOTE: use the secret's VALUE, not its ID. Azure throws AADSTS7000215 if you send the ID.
 export ARM_CLIENT_ID ARM_CLIENT_SECRET ARM_TENANT_ID ARM_SUBSCRIPTION_ID
-
-# NOTE: client_secret_id (the secret's *ID*) is NOT the same as client_secret
-# (the secret's VALUE). Azure throws AADSTS7000215 if you send the ID. We export
-# the VALUE above, which is correct.
-
-echo "ARM_* exported for subscription ${ARM_SUBSCRIPTION_ID} (secret hidden)."
-unset _p
+echo "ARM_* ready (secret hidden)."
+unset -f _tl_have; unset _tl_dir
