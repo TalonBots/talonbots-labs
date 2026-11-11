@@ -39,6 +39,8 @@ export TF_VAR_telegram_bot_token="YOUR_TOKEN_FROM_BOTFATHER"
 
 ```bash
 source ../../scripts/load-azure-creds.sh
+# RG-scoped service principal? Deploy into the pre-created RG instead of creating one:
+#   export TF_VAR_existing_resource_group=rg-your-prebuilt-rg
 terraform init
 terraform apply
 #  ^ first apply takes ~2-3 min: it builds the image in ACR before starting the bot.
@@ -46,7 +48,7 @@ terraform apply
 # -- RECORD --
 # Message your bot on Telegram: /start, /ping, or any text (it echoes).
 # Watch live logs in a second terminal:
-#   az container logs --resource-group rg-telegram-bot-demo --name aci-telegram-bot --follow
+#   az container logs --resource-group "$(terraform output -raw resource_group)" --name aci-telegram-bot --follow
 
 terraform destroy -auto-approve   # removes ACR, image, container — everything
 ```
