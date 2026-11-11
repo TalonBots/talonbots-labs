@@ -31,8 +31,14 @@ variable "location" {
   default     = "eastus"
 }
 
+variable "existing_resource_group" {
+  description = "Name of a pre-created resource group to deploy into. Leave null to create a throwaway RG (needs subscription-scope rights). Set it when your service principal is scoped to a single RG."
+  type        = string
+  default     = null
+}
+
 variable "resource_group_name" {
-  description = "Resource group name for this demo."
+  description = "Resource group name for this demo (only used when existing_resource_group is null)."
   type        = string
   default     = "rg-telegram-bot-demo"
 }

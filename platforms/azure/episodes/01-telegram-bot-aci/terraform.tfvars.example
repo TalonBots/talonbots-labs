@@ -10,6 +10,7 @@ telegram_bot_token = "REPLACE_WITH_YOUR_BOT_TOKEN"
 # Optional overrides (defaults are fine):
 # location             = "eastus"
 # resource_group_name  = "rg-telegram-bot-demo"
+# existing_resource_group = "rg-my-demo"   # deploy into a pre-created RG (RG-scoped SP)
 # container_group_name = "aci-telegram-bot"
 # acr_name_prefix      = "acrtbot"
 # image_tag            = "latest"
