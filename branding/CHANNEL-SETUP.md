@@ -81,3 +81,12 @@ All paths are under `~/projects/talonbots-labs/`.
 - [ ] Decide + add an upload schedule line (banner footer / About) when known
 - [ ] Dry-run Azure AZ-01 against live credit (needs a @BotFather token), then film
 - [ ] Crisp SVG of the logo (current marks are raster)
+
+### Azure filming readiness (added 2026-11-11)
+- [ ] Portal: spending limit is **on** with no card attached
+- [ ] Portal: check the remaining credit for the month
+- [x] Budget alert: $150 monthly, alerts at 50% / 80% / 100% actual + 100% forecast (created via the Consumption API, 2026-11-11)
+- [ ] Filming service principal: Contributor scoped to one dedicated resource group (not the subscription); secret kept outside git
+- [ ] Episodes deploy into that pre-created resource group instead of creating their own (an RG-scoped principal cannot create or delete RGs)
+- [ ] `scripts/.env` on the recording box, filled from the filming principal
+- [ ] Verify the YouTube mid-roll length threshold (the 8-minute figure is unverified)
