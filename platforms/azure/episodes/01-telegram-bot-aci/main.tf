@@ -4,13 +4,28 @@
 # A single `terraform destroy` removes ALL of it — registry, image, container.
 # Nothing is left billing after filming. That's the whole point.
 
+# Resource group: by default this episode creates (and on destroy deletes) its own.
+# Set existing_resource_group to deploy into a pre-created RG instead. Use that when
+# your service principal is scoped to one RG rather than the whole subscription
+# (least privilege): the RG then survives `terraform destroy`, only its contents go.
 module "rg" {
+  count    = var.existing_resource_group == null ? 1 : 0
   source   = "../../modules/resource-group"
   name     = var.resource_group_name
   location = var.location
   tags = {
     expires = var.expires
   }
+}
+
+data "azurerm_resource_group" "existing" {
+  count = var.existing_resource_group == null ? 0 : 1
+  name  = var.existing_resource_group
+}
+
+locals {
+  rg_name     = var.existing_resource_group == null ? module.rg[0].name : data.azurerm_resource_group.existing[0].name
+  rg_location = var.existing_resource_group == null ? module.rg[0].location : data.azurerm_resource_group.existing[0].location
 }
 
 # ACR names are global + alphanumeric only, so we append a random suffix.
@@ -22,8 +37,8 @@ resource "random_string" "acr_suffix" {
 
 resource "azurerm_container_registry" "acr" {
   name                = "${var.acr_name_prefix}${random_string.acr_suffix.result}"
-  resource_group_name = module.rg.name
-  location            = module.rg.location
+  resource_group_name = local.rg_name
+  location            = local.rg_location
   sku                 = "Basic"
   admin_enabled       = true # demo-simple auth for ACI to pull; fine for an ephemeral lab
 
@@ -62,8 +77,8 @@ resource "null_resource" "build" {
 
 resource "azurerm_container_group" "bot" {
   name                = var.container_group_name
-  location            = module.rg.location
-  resource_group_name = module.rg.name
+  location            = local.rg_location
+  resource_group_name = local.rg_name
   os_type             = "Linux"
   restart_policy      = "OnFailure"
 

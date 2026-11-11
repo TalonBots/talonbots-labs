@@ -1,6 +1,6 @@
 output "resource_group" {
-  description = "Resource group holding this demo (destroy this and everything goes)."
-  value       = module.rg.name
+  description = "Resource group holding this demo."
+  value       = local.rg_name
 }
 
 output "acr_login_server" {
@@ -17,7 +17,7 @@ output "next_steps" {
   description = "What to do now."
   value       = <<-EOT
     Bot is running. Watch live logs:
-      az container logs --resource-group ${module.rg.name} --name ${azurerm_container_group.bot.name} --follow
+      az container logs --resource-group ${local.rg_name} --name ${azurerm_container_group.bot.name} --follow
 
     Message your bot on Telegram: /start, /ping, or any text (it echoes).
 

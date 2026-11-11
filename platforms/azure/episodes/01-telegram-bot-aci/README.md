@@ -97,3 +97,20 @@ a demo session costs **well under $0.05** total. Inside the $150 credit, it's $0
 - A **clean teardown**: one `terraform destroy` removes the registry, the image, and the container
 
 Everything down in one command. That's the TalonBots Labs model.
+
+## Least-privilege mode: deploy into an existing resource group
+
+If your service principal is Contributor on **one resource group** instead of the
+whole subscription, it can't create or delete resource groups. Point the episode at
+the pre-created RG instead:
+
+```bash
+export TF_VAR_existing_resource_group="rg-my-demo"
+terraform apply
+```
+
+`terraform destroy` then removes the ACR, image and container but leaves the empty RG
+in place. Provider auto-registration is skipped in this mode, so
+`Microsoft.ContainerRegistry` and `Microsoft.ContainerInstance` must already be
+registered on the subscription (they are on most subscriptions; check with
+`az provider show -n Microsoft.ContainerInstance --query registrationState`).

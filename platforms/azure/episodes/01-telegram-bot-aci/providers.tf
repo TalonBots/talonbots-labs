@@ -24,6 +24,11 @@ terraform {
 provider "azurerm" {
   features {}
 
+  # An RG-scoped principal cannot read or register resource providers at subscription
+  # scope, so skip auto-registration in that mode. Microsoft.ContainerRegistry and
+  # Microsoft.ContainerInstance must already be registered on the subscription.
+  resource_provider_registrations = var.existing_resource_group == null ? "legacy" : "none"
+
   # Auth comes from ARM_* env vars exported by scripts/load-azure-creds.sh.
   # Nothing sensitive is set here.
 }
