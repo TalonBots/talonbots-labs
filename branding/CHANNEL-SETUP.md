@@ -89,4 +89,4 @@ All paths are under `~/projects/talonbots-labs/`.
 - [ ] Filming service principal: Contributor scoped to one dedicated resource group (not the subscription); secret kept outside git
 - [ ] Episodes deploy into that pre-created resource group instead of creating their own (an RG-scoped principal cannot create or delete RGs)
 - [ ] `scripts/.env` on the recording box, filled from the filming principal
-- [ ] Verify the YouTube mid-roll length threshold (the 8-minute figure is unverified)
+- [x] YouTube mid-roll threshold is 8 minutes (verified 2026-11-11 against YouTube Help). The help page is ambiguous about exactly 8:00, so publish at 8:30 or longer
