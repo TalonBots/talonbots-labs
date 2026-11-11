@@ -6,6 +6,7 @@ Token is read from TELEGRAM_BOT_TOKEN env var — never hardcoded.
 
 import logging
 import os
+import re
 import sys
 import time
 
@@ -24,6 +25,18 @@ if not TOKEN:
     sys.exit(1)
 
 BASE = f"https://api.telegram.org/bot{TOKEN}"
+
+
+def scrub(exc: BaseException) -> str:
+    """Exception text that is safe to log.
+
+    requests puts the full request URL in its exception messages, and the
+    Telegram URL contains the bot token (/bot<TOKEN>/method). Never log
+    str(exc) directly.
+    """
+    text = str(exc).replace(TOKEN, "<token>")
+    text = re.sub(r"bot\d+:[A-Za-z0-9_-]+", "bot<token>", text)  # belt and braces
+    return f"{type(exc).__name__}: {text}"
 
 
 def api(method: str, **kwargs) -> dict:
@@ -67,14 +80,14 @@ def poll() -> None:
                 try:
                     handle(u)
                 except Exception as exc:
-                    log.warning("handle error for update %s: %s", u.get("update_id"), exc)
+                    log.warning("handle error for update %s: %s", u.get("update_id"), scrub(exc))
                 offset = u["update_id"] + 1
         except requests.exceptions.RequestException as exc:
-            log.warning("network error (%s) — retrying in %ds", exc, backoff)
+            log.warning("network error (%s) — retrying in %ds", scrub(exc), backoff)
             time.sleep(backoff)
             backoff = min(backoff * 2, 60)
         except Exception as exc:
-            log.error("unexpected error: %s", exc)
+            log.error("unexpected error: %s", scrub(exc))
             time.sleep(backoff)
             backoff = min(backoff * 2, 60)
 
