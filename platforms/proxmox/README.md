@@ -4,7 +4,7 @@
 
 Follows the shared conventions in [`../../shared/README.md`](../../shared/README.md):
 one episode per directory, `apply` → record → `destroy`, everything tagged
-`project=talonbots-labs`, `series=proxmox`, secrets loaded from a vault at runtime.
+`project=talonbots-labs`, `series=proxmox`, secrets loaded from environment variables at runtime.
 
 Planned structure (mirrors the Azure series):
 

@@ -32,20 +32,17 @@ Cost-control on a free credit is a feature here, not an afterthought.
 
 ## Auth — no secrets in this repo
 
-Credentials live in Vault (`homelab/azure-sp`) and are exported as `ARM_*`
-environment variables at runtime. Never commit a client secret.
+Credentials are read from `ARM_*` environment variables at runtime. Never commit a
+client secret.
 
 ```bash
-source scripts/load-azure-creds.sh   # pulls SP creds from Vault → ARM_* env vars
+cp scripts/.env.example scripts/.env     # gitignored; fill in your own service principal
+source scripts/load-azure-creds.sh       # exports ARM_* (or uses ones already in your env)
 ```
 
-If you're following along without Vault, copy the template and fill it in
-(it's gitignored):
-
-```bash
-cp scripts/.env.example scripts/.env
-# edit scripts/.env with your own SP, then:  set -a; source scripts/.env; set +a
-```
+Already export `ARM_CLIENT_ID`, `ARM_CLIENT_SECRET`, `ARM_TENANT_ID` and
+`ARM_SUBSCRIPTION_ID`? The loader just confirms they're set. If you keep the SP in
+HashiCorp Vault, set `VAULT_ADDR` and `AZURE_VAULT_PATH` and the loader will read it.
 
 ## Reproduce a demo
 
@@ -63,12 +60,6 @@ Or use the helper that wraps the full loop with a teardown trap:
 ```bash
 ../../shared/apply-record-destroy.sh episodes/00-bootstrap
 ```
-
-## Episodes
-
-| # | Title | Status |
-|---|-------|--------|
-| 00 | Bootstrap: service principal auth + remote tfstate backend | scaffolded |
 
 > Sanitization rule: this repo is public-facing. Generic, original demos only —
 > zero employer/work content, ever. Assume every frame is public forever.

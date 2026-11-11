@@ -20,7 +20,7 @@ terraform.rc
 !.env.example
 *.auto.tfvars
 
-# Local Azure creds (always sourced from Vault, never written to disk — belt & suspenders)
+# Local Azure creds (never written to disk — belt & suspenders)
 azure-creds.sh
 arm.env
 

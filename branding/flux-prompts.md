@@ -52,8 +52,10 @@ Isometric 3D vector icon of a mechanical robotic raptor talon claw gripping hexa
 ## API Snippet (for re-running)
 
 ```bash
-ACCOUNT_ID="$(vault kv get -field=account_id homelab/cloudflare)"
-TOKEN="$(vault kv get -field=edit_token homelab/cloudflare)"
+# Export these yourself: a Cloudflare account ID and an API token with Workers AI access.
+: "${CF_ACCOUNT_ID:?set CF_ACCOUNT_ID}" "${CF_API_TOKEN:?set CF_API_TOKEN}"
+ACCOUNT_ID="$CF_ACCOUNT_ID"
+TOKEN="$CF_API_TOKEN"
 PROMPT="your prompt here"
 
 curl -s -X POST \

@@ -13,7 +13,7 @@ that survives a `terraform destroy`. This episode builds both.
 ## Run it
 
 ```bash
-source ../../scripts/load-azure-creds.sh   # ARM_* from Vault
+source ../../scripts/load-azure-creds.sh   # ARM_* from your env or scripts/.env
 terraform init
 terraform plan
 terraform apply
