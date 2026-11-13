@@ -9,6 +9,12 @@
 - **Tagline: #4** — "Automate everything. Nuke the evidence." (primary/brand). **Positioning line: #1** — "Deploy. Destroy. Repeat." (process/footer). See §2 for which goes where.
 - **Display casing: `TalonBots`** (capital B) in ALL human-facing copy and shown URLs (`github.com/TalonBots`). ⚠️ The GitHub org was created as slug **`Talonbots`** (lowercase b). GitHub is case-insensitive so `github.com/TalonBots` resolves fine — but for a true canonical match, **recommend renaming the org to `TalonBots`** (Org → Settings → rename; Sun's action). Functional/literal refs (git remote, raw asset URLs, API calls) keep the real slug until the rename.
 
+### Vector logo (added 2026-11-13, ops#124)
+- **`assets/raptor-logo.svg`**: the hero (r3a) raptor, traced from `assets/raptor-hero-deglow.png`.
+- **`assets/raptor-mark.svg`**: the bold (r3b) raptor used on the avatar, banner and favicons, traced from `assets/raptor-deglow.png`.
+- Both are a single `<path>` with one flat fill `#00EDFB` (sampled from the shipped mark), transparent background, `viewBox="0 0 1024 1024"`, ~13-17 KB. They are auto-traced, not hand-cleaned. Recolour by editing the one `fill` attribute.
+- How: mask = max(G,B) at or above 200 (hero) or 170 (mark), 2x Lanczos upscale, potracer 0.0.4 (pure-Python potrace; turnpolicy minority, alphamax 1.0, opttolerance 0.4, turdsize 24). Then render back with resvg and diff against the source. Dated copies live in `assets/versions/`.
+
 ---
 
 ## 1. Brand Spine
